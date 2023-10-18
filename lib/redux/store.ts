@@ -7,11 +7,21 @@ import {
 } from 'react-redux'
 
 /* Instruments */
-import { reducer } from './rootReducer'
+import { rootReducer } from './rootReducer'
 import { middleware } from './middleware'
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const reduxStore = configureStore({
-  reducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(middleware)
   },
